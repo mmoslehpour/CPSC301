@@ -64,7 +64,7 @@ int main()
 }
 
 
-
+//  Display all records in array
 void Display(PERSON* a, int N) // void printArray (int myArray[], int size)
 {
 
