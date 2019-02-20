@@ -1,0 +1,134 @@
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <cstring>
+#include <string>
+
+
+using namespace std;
+
+
+struct PERSON {
+    char Name[20];
+    float Balance;
+};
+
+
+void Display(PERSON* a, int N);
+void FindRichest(PERSON* a, int N);
+void Deposit(char CustName[], PERSON* a, int N);
+void NewCopy(string fname, PERSON* a, int N);
+
+
+int main()
+{
+
+    int N = 0;
+    ifstream file;
+    file.open("data.txt");
+    if (file.fail()) {    // if fail to open file
+        cout << "Unable to open file" << endl;
+        return 0;
+    }
+
+
+    string line;
+    while (getline(file, line)) { // read from file line by line
+        N++;
+    }
+
+
+    file.clear(); // clear error
+    file.seekg(0, ios::beg); // seek from the beginning of the file 
+
+
+    PERSON *a = new PERSON[N];  //  person with size of n ; using new to allocates amout of memory needed
+
+    string fname, lname;
+    int i = 0;
+    while (file >> fname) { // read first name from file
+        file >> lname >> a[i].Balance;  // read last name and balance
+        strcpy(a[i].Name, (fname + " " + lname).c_str()); 
+        i++;
+    }
+
+    Display(a, N);
+    FindRichest(a, N);
+    char CustName[20];
+    cout << endl << "Enter your full name to deposit money: ";
+    cin.getline(CustName, 20);
+    Deposit(CustName, a, N);
+    NewCopy("data.txt", a, N);
+
+    return 0;
+}
+
+
+
+void Display(PERSON* a, int N) // void printArray (int myArray[], int size)
+{
+
+    cout << setprecision(2) << fixed;
+    cout << setw(20) << left << endl << "Name" << " Balance" << endl;
+    cout << "-------------------------------------" << endl;
+    for (int i = 0; i < N; i++) {
+        cout << setw(20) << a[i].Name << " " << a[i].Balance << endl ;
+    }
+}
+
+
+// Display the name of customer with maximum balance
+void FindRichest(PERSON* a, int N)
+{
+    int max = 0;
+    for (int i = 0; i < N; i++) {
+        if (a[max].Balance < a[i].Balance)
+            max = i;
+    }
+
+    cout << endl << "The customer with maximum balance is " << a[max].Name << endl;
+}
+
+
+// Allow a customer to deposit money in his/her account
+void Deposit(char CustName[], PERSON* a, int N) 
+{
+    int ind = -1;
+
+    for (int i = 0; i < N; i++) {
+
+        if (strcmp(CustName, a[i].Name) == 0) {    // compare user entry to name in file
+            ind = i;
+            break;
+        }
+    }
+
+    if (ind == -1)   // if can't find user input
+        cout << "Sorry, can not find the name. " << endl;
+
+    else {   // user input is found in file
+
+        double deposit;
+        cout << CustName << ", how much would you like to deposit? ";   
+        cin >> deposit;
+        a[ind].Balance += deposit;    // add user input to exsiting value
+        cout << "Now your new balance is " << a[ind].Balance << endl;
+    }
+}
+
+// turn in a copy of the file with the new updated records
+void NewCopy(string fname, PERSON * a, int N)  
+{
+
+    ofstream out;
+    out << setprecision(2) << fixed;
+    out.open(fname.c_str());
+
+    for (int i = 0; i < N; i++) {
+
+        out << a[i].Name << " " << a[i].Balance << endl;
+
+    }
+
+    out.close();
+}
