@@ -1,2 +1,2 @@
- # CPSC301 - Assignment 1
+ # CPSC301
 
