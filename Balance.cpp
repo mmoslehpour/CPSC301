@@ -160,35 +160,27 @@ void FindRichest(PERSON a[], int N)
 void Deposit(PERSON a[], int N, string CustName, float amount) 
 {
     cout << "Enter name to deposit: " << endl;
+    cin.ignore();
     getline (cin, CustName);
 
-    break;
-
     for (int i = 0; i < N; i++) {
+        if (strcmp(a[i].Name, CustName.c_str() ) == 0) {
+            cout << "Amount to deposit: " << endl;
 
-        if (a[i].Name == CustName) {
-
-            cout << "Amount to deposit: " << endl;  
+            float amount = 0;
             cin >> amount;
-
+            cin.ignore();
             a[i].Balance += amount;
             cout << "New Balance: " << a[i].Balance << endl;
-
         }
 
-
-
-        else 
-        {
+        else if (strcmp(a[i].Name, CustName.c_str() ) == 1) {
             cout << "Record not found." << endl;
-
         }
-
-
     }
 
-
 }
+
 
 
 // turn in a copy of the file with the new updated records
